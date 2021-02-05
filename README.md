@@ -1,6 +1,6 @@
 # kuberesource
 
-计算集群每个节点当前的requests和limit以及可分配的资源总量
+Calucate requests/limits and allocatable resource of node on the Kubernetes cluster.
 
 ## Build from source
 
