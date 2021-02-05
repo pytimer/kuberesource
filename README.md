@@ -1,5 +1,7 @@
 # kuberesource
 
+![Golint](https://github.com/pytimer/kuberesource/workflows/Go/badge.svg)
+
 Calucate requests/limits and allocatable resource of node on the Kubernetes cluster.
 
 ## Build from source

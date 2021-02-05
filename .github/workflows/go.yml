@@ -2,10 +2,8 @@ name: Go
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  
+    tags:
+      - "*"
 
 jobs:
 
@@ -19,8 +17,55 @@ jobs:
       with:
         go-version: 1.14
 
-    - name: Build
-      run: go build -v ./...
-
     - name: Test
       run: go test -v ./...
+
+    - name: Build
+      run: |
+        CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o kuberesource-windows.exe main.go
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o kuberesource-linux main.go
+        CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o kuberesource-darwin main.go
+        zip kuberesource-windows-amd64.zip kuberesource-windows.exe
+        tar zcf kuberesource-linux-amd64.tar.gz kuberesource-linux
+        tar zcf kuberesource-darwin-amd64.tar.gz kuberesource-darwin
+
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload linux release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./kuberesource-linux-amd64.tar.gz
+        asset_name: kuberesource-linux-amd64.tar.gz
+        asset_content_type: application/tar+gzip
+
+    - name: Upload darwin release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./kuberesource-darwin-amd64.tar.gz
+        asset_name: kuberesource-darwin-amd64.tar.gz
+        asset_content_type: application/tar+gzip
+
+    - name: Upload windows release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./kuberesource-windows-amd64.zip
+        asset_name: kuberesource-windows-amd64.zip
+        asset_content_type: application/zip
