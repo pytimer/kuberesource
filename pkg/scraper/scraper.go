@@ -7,6 +7,7 @@ import (
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/pytimer/kuberesource/pkg/node"
+	"github.com/pytimer/kuberesource/pkg/util"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -30,13 +31,16 @@ func NewScraper(client kubernetes.Interface) *scraper {
 | memory | 520Mi    | 3694Mi | 6333800Ki   |
 +--------+----------+--------+-------------+
 */
-func (s *scraper) FetchResourceQuota(ctx context.Context) error {
+func (s *scraper) FetchResourceQuota(ctx context.Context, names []string) error {
 	nodes, err := s.kubeClient.CoreV1().Nodes().List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		return err
 	}
 
 	for _, n := range nodes.Items {
+		if len(names) != 0 && !util.HasString(names, n.Name) {
+			continue
+		}
 		podList, err := node.GetNonTerminatedPodsOfNode(s.kubeClient, n.Name)
 		if err != nil {
 			return err

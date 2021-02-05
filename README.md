@@ -2,6 +2,14 @@
 
 计算集群每个节点当前的requests和limit以及可分配的资源总量
 
+## Build from source
+
+`go build`
+
+## Usage
+
+### Get all nodes
+
 ```bash
 $ ./kuberesource --kubeconfig ~/.kube/config
                 meta-k8s-234
@@ -26,6 +34,28 @@ $ ./kuberesource --kubeconfig ~/.kube/config
 +--------+----------+--------+-------------+
 | memory | 2387Mi   | 1737Mi | 6333792Ki   |
 | cpu    | 737m     | 2500m  | 3600m       |
++--------+----------+--------+-------------+
+
+                meta-k8s-237
++--------+----------+--------+-------------+
+|  Name  | Requests | Limits | Allocatable |
++--------+----------+--------+-------------+
+| cpu    | 1307m    | 11310m | 3600m       |
+| memory | 1075Mi   | 6397Mi | 6333792Ki   |
++--------+----------+--------+-------------+
+
+```
+
+### Get the specified nodes
+
+```bash
+$ ./kuberesource --kubeconfig ~/.kube/config meta-k8s-237 meta-k8s-235
+                meta-k8s-235
++--------+----------+--------+-------------+
+|  Name  | Requests | Limits | Allocatable |
++--------+----------+--------+-------------+
+| cpu    | 132m     | 1500m  | 3600m       |
+| memory | 255Mi    | 725Mi  | 6333792Ki   |
 +--------+----------+--------+-------------+
 
                 meta-k8s-237

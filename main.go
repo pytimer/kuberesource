@@ -18,8 +18,6 @@ import (
 var (
 	level          int
 	kubeconfigPath string
-
-	showNodes bool
 )
 
 func main() {
@@ -36,12 +34,13 @@ func main() {
 	root := cobra.Command{
 		Use: "kuberesource",
 		Run: func(cmd *cobra.Command, args []string) {
+			names := args
 			client, err := kube.NewClient(kubeconfigPath)
 			if err != nil {
 				return
 			}
 			s := scraper.NewScraper(client)
-			s.FetchResourceQuota(context.Background())
+			s.FetchResourceQuota(context.Background(), names)
 		},
 	}
 
