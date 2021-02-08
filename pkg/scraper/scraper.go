@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/olekukonko/tablewriter"
 	"github.com/pytimer/kuberesource/pkg/node"
 	"github.com/pytimer/kuberesource/pkg/util"
+
+	"github.com/olekukonko/tablewriter"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )

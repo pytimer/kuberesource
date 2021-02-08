@@ -13,7 +13,7 @@ Calucate requests/limits and allocatable resource of node on the Kubernetes clus
 ### Get all nodes
 
 ```bash
-$ ./kuberesource --kubeconfig ~/.kube/config
+$ ./kuberesource node --kubeconfig ~/.kube/config
                 meta-k8s-234
 +--------+----------+--------+-------------+
 |  Name  | Requests | Limits | Allocatable |
@@ -51,7 +51,7 @@ $ ./kuberesource --kubeconfig ~/.kube/config
 ### Get the specified nodes
 
 ```bash
-$ ./kuberesource --kubeconfig ~/.kube/config meta-k8s-237 meta-k8s-235
+$ ./kuberesource node --kubeconfig ~/.kube/config meta-k8s-237 meta-k8s-235
                 meta-k8s-235
 +--------+----------+--------+-------------+
 |  Name  | Requests | Limits | Allocatable |
